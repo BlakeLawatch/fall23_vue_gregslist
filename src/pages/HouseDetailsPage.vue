@@ -3,7 +3,7 @@
         <section class="row">
             <div class="col-12 p-5">
                 <div class="col-4">
-
+                    {{ house }}
                 </div>
                 <div class="col-8">
 
@@ -16,18 +16,27 @@
 
 <script>
 
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { houseService } from '../services/HouseService';
-import { logger } from '../utils/Logger.js';
+import Pop from '../utils/Pop';
+import { AppState } from '../AppState.js';
+import { logger } from '../utils/Logger';
+import { useRoute } from 'vue-router';
 
 export default {
     setup() {
 
-        const route = route();
+        const route = useRoute();
 
         async function getHouseById() {
-            const houseId = route.params.id
-            await houseService.getHouseById(houseId)
+            try {
+                const houseId = route.params.id
+                await houseService.getHouseById(houseId)
+                logger.log('houses in the details page', houseId)
+
+            } catch (error) {
+                Pop.error(error)
+            }
         }
 
         onMounted(() => {
@@ -35,7 +44,7 @@ export default {
         })
 
         return {
-
+            house: computed(() => AppState.activeHouse)
         }
     }
 };
