@@ -23,6 +23,11 @@ class HouseService {
         const newHouse = new House(res.data)
         AppState.houses.push(newHouse)
     }
+
+    async getHouseById(houseId) {
+        const res = await api.get(`api/houses/${houseId}`)
+        logger.log('got house by ID', res.data)
+    }
 }
 
 export const houseService = new HouseService()
