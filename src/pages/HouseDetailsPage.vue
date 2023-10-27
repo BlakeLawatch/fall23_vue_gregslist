@@ -1,14 +1,13 @@
 <template>
     <div class="container-fluid">
         <section class="row">
-            <div class="col-12 p-5">
-                <div class="col-4">
-                    {{ house }}
-                </div>
-                <div class="col-8">
-
-                </div>
+            <div v-if="house" class="col-4">
+                {{ house }}
             </div>
+            <div class="col-8">
+
+            </div>
+
         </section>
     </div>
 </template>
@@ -24,13 +23,15 @@ import { logger } from '../utils/Logger';
 import { useRoute } from 'vue-router';
 
 export default {
+
     setup() {
 
         const route = useRoute();
 
         async function getHouseById() {
             try {
-                const houseId = route.params.id
+                AppState.activeHouse = null
+                const houseId = route.params.houseId
                 await houseService.getHouseById(houseId)
                 logger.log('houses in the details page', houseId)
 
