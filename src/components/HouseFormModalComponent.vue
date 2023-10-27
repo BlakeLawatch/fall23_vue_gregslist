@@ -4,7 +4,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-body">
-                        <form @submit.prevent="createHouse()">
+                        <form @submit.prevent="submitStyle()">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">X</button>
                             <div class="mb-3">
                                 <label for="bedrooms" class="form-label">Bedrooms</label>
@@ -58,6 +58,12 @@ export default {
 
         return {
             editable,
+            submitStyle() {
+                if (!editable.value.id) {
+                    this.createHouse
+                }
+                else { this.editHouse }
+            },
 
 
             async createHouse() {
@@ -69,10 +75,15 @@ export default {
                 } catch (error) {
                     Pop.error(error)
                 }
+            },
+
+            async editHouse() {
+                const houseData = editable.value
+                await houseService.editHouse(houseData)
             }
         }
     }
-};
+}
 </script>
 
 
