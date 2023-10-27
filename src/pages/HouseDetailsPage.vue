@@ -20,6 +20,8 @@
             </div>
         </section>
     </div>
+
+    <HouseFormModalComponent />
 </template>
 
 
@@ -31,48 +33,46 @@ import Pop from '../utils/Pop';
 import { AppState } from '../AppState.js';
 import { logger } from '../utils/Logger';
 import { useRoute, useRouter } from 'vue-router';
+import HouseFormModalComponent from '../components/HouseFormModalComponent.vue';
 
 export default {
-
     setup() {
-
         const route = useRoute();
         const router = useRouter();
-
         async function getHouseById() {
             try {
-                AppState.activeHouse = null
-                const houseId = route.params.houseId
-                await houseService.getHouseById(houseId)
-                logger.log('houses in the details page', houseId)
-
-            } catch (error) {
-                Pop.error(error)
+                AppState.activeHouse = null;
+                const houseId = route.params.houseId;
+                await houseService.getHouseById(houseId);
+                logger.log('houses in the details page', houseId);
+            }
+            catch (error) {
+                Pop.error(error);
             }
         }
-
         onMounted(() => {
-            getHouseById()
-        })
-
+            getHouseById();
+        });
         return {
             house: computed(() => AppState.activeHouse),
             account: computed(() => AppState.account),
             async destroyHouse() {
                 try {
-                    const wantsToDelete = await Pop.confirm('You sure about that?')
+                    const wantsToDelete = await Pop.confirm('You sure about that?');
                     if (!wantsToDelete) {
-                        return
+                        return;
                     }
-                    const houseId = route.params.houseId
-                    await houseService.destroyHouse(houseId)
-                    router.push({ name: 'houses' })
-                } catch (error) {
-                    Pop.error(error)
+                    const houseId = route.params.houseId;
+                    await houseService.destroyHouse(houseId);
+                    router.push({ name: 'houses' });
+                }
+                catch (error) {
+                    Pop.error(error);
                 }
             }
-        }
-    }
+        };
+    },
+    components: { HouseFormModalComponent }
 };
 </script>
 
